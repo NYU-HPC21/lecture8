@@ -14,7 +14,7 @@ double time_pingpong(int proc0, int proc1, long Nrepeat, long Nsize, MPI_Comm co
   double tt = MPI_Wtime();
   for (long repeat  = 0; repeat < Nrepeat; repeat++) {
     MPI_Status status;
-    if (repeat % 1 == 0) { // even iterations
+    if (repeat % 2 == 0) { // even iterations
 
       if (rank == proc0)
         MPI_Send(msg, Nsize, MPI_CHAR, proc1, repeat, comm);
@@ -25,9 +25,9 @@ double time_pingpong(int proc0, int proc1, long Nrepeat, long Nsize, MPI_Comm co
     else { // odd iterations
 
       if (rank == proc0)
-        MPI_Recv(msg, Nsize, MPI_CHAR, proc0, repeat, comm, &status);
+        MPI_Recv(msg, Nsize, MPI_CHAR, proc1, repeat, comm, &status);
       else if (rank == proc1)
-        MPI_Send(msg, Nsize, MPI_CHAR, proc1, repeat, comm);
+        MPI_Send(msg, Nsize, MPI_CHAR, proc0, repeat, comm);
 
     }
   }
